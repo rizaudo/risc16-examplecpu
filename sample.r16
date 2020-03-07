@@ -1,0 +1,31 @@
+#
+# main loop: loads a number and then a variable number of data items to subtract
+# from the first. at end, saves result in “diff” memory location
+#
+      lw r1, r0, arg1
+      lw r3, r0, count
+loop: lw r2, r4, arg2
+      movi r7, sub
+      jalr r7, r7
+      addi r3, r3, -1
+      beq r3, 0, exit
+      addi r4, r4, 1
+      beq r0, r0, loop
+exit: sw r1, r0, diff
+      halt
+#
+# subtract function:
+# operands in r1/r2, return address in r7. result -> r1
+#
+sub: nand r2, r2, r2
+     addi r2, r2, 1
+     add r1, r1, r2
+     jalr r0, r7
+#
+# data: count is the # of items to subtract from arg1 (in this case, 1: arg2)
+# diff is where the result is placed
+#
+count: .fill 1
+arg1: .fill 9182
+arg2: .fill 737
+diff: .fill 0
